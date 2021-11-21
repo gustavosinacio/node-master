@@ -11,8 +11,7 @@ console.log(new Date());
 const http = require("http");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
-
-const port = 3001;
+const config = require("./config");
 
 // handlers
 const handlers = {
@@ -21,7 +20,7 @@ const handlers = {
     callback(406, { name: "sample" });
   },
   notFound: (data, callback) => {
-    console.log(98217, "error");
+    console.log(98217, "error", data);
     callback(404);
   },
 };
@@ -85,12 +84,15 @@ const server = http.createServer((req, res) => {
       const payloadString = JSON.stringify(payload);
 
       // Send the response
+      res.setHeader("Content-Type", "application/json");
       res.writeHead(statusCode);
       res.end(payloadString);
     });
   });
 });
 
-server.listen(port, () => {
-  console.log(9821, `listening on port ${port}`);
+server.listen(config.port, () => {
+  console.log(
+    `${config.envName.toUpperCase()} Listening on port ${config.port}`
+  );
 });
