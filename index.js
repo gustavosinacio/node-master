@@ -18,23 +18,7 @@ const StringDecoder = require("string_decoder").StringDecoder;
 const fs = require("fs");
 
 const config = require("./config");
-
-// handlers
-const handlers = {
-  sample: (data, callback) => {
-    console.log(98212, data);
-    callback(406, { name: "sample" });
-  },
-  notFound: (data, callback) => {
-    console.log(98217, "error", data);
-    callback(404);
-  },
-};
-
-// router
-const router = {
-  sample: handlers.sample,
-};
+const handlers = require("./lib/handlers");
 
 // All the server logic for both the http and https server
 const unifiedServer = (req, res) => {
@@ -58,7 +42,6 @@ const unifiedServer = (req, res) => {
 
   // creates event listener for when data is sent and binds to it's **stream**
   req.on("data", (data) => {
-    console.log(98210, "Reading data...");
     buffer += decoder.write(data);
   });
 
@@ -131,3 +114,8 @@ httpsServer.listen(config.httpsPort, () => {
   );
 });
 // -----------------------------------------------------------------------------
+
+// router
+const router = {
+  ...handlers,
+};
