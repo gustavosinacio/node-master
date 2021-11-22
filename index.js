@@ -17,8 +17,9 @@ const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
 const fs = require("fs");
 
-const config = require("./config");
+const config = require("./lib/config");
 const handlers = require("./lib/handlers");
+const helpers = require("./lib/helpers");
 
 // All the server logic for both the http and https server
 const unifiedServer = (req, res) => {
@@ -57,7 +58,7 @@ const unifiedServer = (req, res) => {
     const data = {
       headers,
       method,
-      payload: buffer,
+      payload: helpers.parseJSONToObject(buffer),
       queryStringObject,
       trimmedPath,
     };
